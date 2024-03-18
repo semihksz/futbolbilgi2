@@ -14,6 +14,7 @@
     <link href="{{ asset('assets/backend/plugins/simplebar/css/simplebar.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/backend/plugins/perfect-scrollbar/css/perfect-scrollbar.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/backend/plugins/metismenu/css/metisMenu.min.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('assets/backend/plugins/fontawesome/css/all.min.css') }}">
 
     <!-- CSS Files -->
     <link href="{{ asset('assets/backend/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -219,6 +220,14 @@
     <script>
         ClassicEditor
             .create(document.querySelector('#editor'))
+            .catch(error => {
+                console.error(error);
+
+            });
+    </script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#editor1'))
             .catch(error => {
                 console.error(error);
 

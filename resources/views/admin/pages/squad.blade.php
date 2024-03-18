@@ -3,16 +3,36 @@
 @section('content')
     <h6 class="mb-0 text-uppercase">{{ $season_id->season_date }} Erkek Futbol A Takımı Takım Kadrosu</h6>
     <hr />
-
+    <style>
+        .my-swal {
+            background: #000000;
+        }
+    </style>
     @if (session('success'))
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             Swal.fire({
                 position: "top-end",
                 icon: "success",
-                title: "{{ $success }}",
+                title: @json(session('success')),
                 showConfirmButton: false,
-                timer: 1500
+                timer: 1500,
+                customClass: {
+                    popup: 'my-swal'
+                },
+            });
+        </script>
+    @endif
+
+    @if ($errors->any())
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: @json(implode('<br>', $errors->all())),
+                customClass: {
+                    popup: 'my-swal'
+                },
             });
         </script>
     @endif
@@ -93,15 +113,8 @@
                         <div class="row">
                             <div class="col-lg-3">
                                 <div class="mb-3">
-                                    <label for="bsValidation5" class="form-label">Yaş</label>
-                                    <input type="number" name="age" id="bsValidation5" class="form-control" required />
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="mb-3">
                                     <label for="bsValidation6" class="form-label">Boy</label>
-                                    <input type="number" name="height" id="bsValidation6" class="form-control"
-                                        required />
+                                    <input type="number" name="height" id="bsValidation6" class="form-control" required />
                                 </div>
                             </div>
                             <div class="col-lg-3">
@@ -139,7 +152,6 @@
                             <thead>
                                 <tr>
                                     <th>Adı</th>
-                                    <th>Pozisyonu</th>
                                     <th>İşlemler</th>
                                 </tr>
                             </thead>
@@ -150,21 +162,144 @@
                                                 alt="{{ $player->image }}" class="rounded-circle me-2"
                                                 style="max-width:50px">
                                             {{ $player->name }}</td>
-                                        <td>{{ $player->position }}</td>
-                                        <td></td>
+                                        <td>
+                                            <!-- Button trigger modal -->
+                                            <button type="button" class="btn" data-bs-toggle="modal"
+                                                data-bs-target="#staticBackdrop{{ $player->id }}">
+                                                <i class="fa fa-pencil text-warning" aria-hidden="true"></i>
+                                            </button>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="staticBackdrop{{ $player->id }}"
+                                                data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                                aria-labelledby="staticBackdropLabel{{ $player->id }}"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5"
+                                                                id="staticBackdropLabel{{ $player->id }}">
+                                                                {{ $player->name }}</h1>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form
+                                                                action="{{ route('takim-kadrosu.update', ['takim_kadrosu' => $player->id]) }}"
+                                                                method="post">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <input type="hidden" name="team"
+                                                                    value="erkek-futbol-a-takim" required />
+                                                                <input type="hidden" name="season_id"
+                                                                    value="{{ $season_id->id }}" required />
+                                                                <input type="hidden" name="lang"
+                                                                    value="{{ $player->lang }}" required />
+                                                                <div class="mb-3">
+                                                                    <img src="{{ asset('assets/images/players' . '/' . $player->image) }}"
+                                                                        alt="" class="mb-2">
+                                                                    <input type="file" class="form-control"
+                                                                        name="image" />
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="" class="form-label">Oyuncu
+                                                                        Adı</label>
+                                                                    <input type="text" class="form-control"
+                                                                        name="name" value="{{ $player->name }}" />
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="" class="form-label">Oyuncu
+                                                                        Uyruğu</label>
+                                                                    <input type="text" class="form-control"
+                                                                        name="nationality"
+                                                                        value="{{ $player->nationality }}" />
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="" class="form-label">Oyuncu
+                                                                        Mevkisi</label>
+                                                                    <select class="form-select form-select-md"
+                                                                        name="position">
+                                                                        @if ($player->position == 'kal')
+                                                                            <option value="kal" selected>Kaleci</option>
+                                                                            <option value="def">Defans</option>
+                                                                            <option value="os">Orta Saha</option>
+                                                                            <option value="fv">Forvet</option>
+                                                                        @elseif ($player->position == 'def')
+                                                                            <option value="def" selected>Defans</option>
+                                                                            <option value="kal">Kaleci</option>
+                                                                            <option value="os">Orta Saha</option>
+                                                                            <option value="fv">Forvet</option>
+                                                                        @elseif ($player->position == 'os')
+                                                                            <option value="os" selected>Orta Saha
+                                                                            </option>
+                                                                            <option value="kal">Kaleci</option>
+                                                                            <option value="def">Defans</option>
+                                                                            <option value="fv">Forvet</option>
+                                                                        @elseif ($player->position == 'fv')
+                                                                            <option value="fv" selected>Forvet</option>
+                                                                            <option value="kal">Kaleci</option>
+                                                                            <option value="def">Defans</option>
+                                                                            <option value="os">Orta Saha</option>
+                                                                        @endif
+                                                                    </select>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="" class="form-label">Oyuncu
+                                                                        Doğum Tarihi</label>
+                                                                    <input type="date" class="form-control"
+                                                                        name="birthday"
+                                                                        value="{{ $player->birthday }}" />
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-4">
+                                                                        <div class="mb-3">
+                                                                            <label for=""
+                                                                                class="form-label">Oyuncu
+                                                                                Boyu</label>
+                                                                            <input type="text" class="form-control"
+                                                                                name="height"
+                                                                                value="{{ $player->height }}" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <div class="mb-3">
+                                                                            <label for=""
+                                                                                class="form-label">Oyuncu
+                                                                                Kilosu</label>
+                                                                            <input type="text" class="form-control"
+                                                                                name="weight"
+                                                                                value="{{ $player->weight }}" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <div class="mb-3">
+                                                                            <label for=""
+                                                                                class="form-label">Oyuncu
+                                                                                Forma Numarası</label>
+                                                                            <input type="text" class="form-control"
+                                                                                name="shirt_number"
+                                                                                value="{{ $player->shirt_number }}" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="" class="form-label">Oyuncu
+                                                                        Hayatı</label>
+                                                                    <textarea class="form-control" id="editor1" cols="30" rows="10" name="biography">{{ $player->biography }}</textarea>
+                                                                </div>
+                                                                <button type="button" class="btn btn-warning"
+                                                                    data-bs-dismiss="modal">İptal</button>
+                                                                <button type="submit"
+                                                                    class="btn btn-danger">Güncelle</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
-                            <tfoot>
-                                {{-- <tr>
-                                <th>Name</th>
-                                <th>Position</th>
-                                <th>Office</th>
-                                <th>Age</th>
-                                <th>Start date</th>
-                                <th>Salary</th>
-                            </tr> --}}
-                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -174,7 +309,6 @@
                             <thead>
                                 <tr>
                                     <th>Adı</th>
-                                    <th>Pozisyonu</th>
                                     <th>İşlemler</th>
                                 </tr>
                             </thead>
@@ -185,21 +319,134 @@
                                                 alt="{{ $player->image }}" class="rounded-circle me-2"
                                                 style="max-width:50px">
                                             {{ $player->name }}</td>
-                                        <td>{{ $player->position }}</td>
-                                        <td></td>
+                                        <td><button type="button" class="btn" data-bs-toggle="modal"
+                                                data-bs-target="#staticBackdrop{{ $player->id }}">
+                                                <i class="fa fa-pencil text-warning" aria-hidden="true"></i>
+                                            </button>
+                                            <div class="modal fade" id="staticBackdrop{{ $player->id }}"
+                                                data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                                aria-labelledby="staticBackdropLabel{{ $player->id }}"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5"
+                                                                id="staticBackdropLabel{{ $player->id }}">
+                                                                {{ $player->name }}</h1>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form
+                                                                action="{{ route('takim-kadrosu.update', ['takim_kadrosu' => $player->id]) }}"
+                                                                method="post">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <div class="mb-3">
+                                                                    <img src="{{ asset('assets/images/players' . '/' . $player->image) }}"
+                                                                        alt="" class="mb-2">
+                                                                    <input type="file" class="form-control"
+                                                                        name="" />
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="" class="form-label">Oyuncu
+                                                                        Adı</label>
+                                                                    <input type="text" class="form-control"
+                                                                        name="name" value="{{ $player->name }}" />
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="" class="form-label">Oyuncu
+                                                                        Uyruğu</label>
+                                                                    <input type="text" class="form-control"
+                                                                        name="nationality"
+                                                                        value="{{ $player->nationality }}" />
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="" class="form-label">Oyuncu
+                                                                        Mevkisi</label>
+                                                                    <select class="form-select form-select-md"
+                                                                        name="{{ $player->position }}">
+                                                                        @if ($player->position == 'kal')
+                                                                            <option value="kal" selected>Kaleci</option>
+                                                                            <option value="def">Defans</option>
+                                                                            <option value="os">Orta Saha</option>
+                                                                            <option value="fv">Forvet</option>
+                                                                        @elseif ($player->position == 'def')
+                                                                            <option value="def" selected>Defans</option>
+                                                                            <option value="kal">Kaleci</option>
+                                                                            <option value="os">Orta Saha</option>
+                                                                            <option value="fv">Forvet</option>
+                                                                        @elseif ($player->position == 'os')
+                                                                            <option value="os" selected>Orta Saha
+                                                                            </option>
+                                                                            <option value="kal">Kaleci</option>
+                                                                            <option value="def">Defans</option>
+                                                                            <option value="fv">Forvet</option>
+                                                                        @elseif ($player->position == 'fv')
+                                                                            <option value="fv" selected>Forvet</option>
+                                                                            <option value="kal">Kaleci</option>
+                                                                            <option value="def">Defans</option>
+                                                                            <option value="os">Orta Saha</option>
+                                                                        @endif
+                                                                    </select>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="" class="form-label">Oyuncu
+                                                                        Doğum Tarihi</label>
+                                                                    <input type="date" class="form-control"
+                                                                        name="birthday"
+                                                                        value="{{ $player->birthday }}" />
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-4">
+                                                                        <div class="mb-3">
+                                                                            <label for=""
+                                                                                class="form-label">Oyuncu
+                                                                                Boyu</label>
+                                                                            <input type="text" class="form-control"
+                                                                                name="height"
+                                                                                value="{{ $player->height }}" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <div class="mb-3">
+                                                                            <label for=""
+                                                                                class="form-label">Oyuncu
+                                                                                Kilosu</label>
+                                                                            <input type="text" class="form-control"
+                                                                                name="weight"
+                                                                                value="{{ $player->weight }}" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <div class="mb-3">
+                                                                            <label for=""
+                                                                                class="form-label">Oyuncu
+                                                                                Forma Numarası</label>
+                                                                            <input type="text" class="form-control"
+                                                                                name="shirt_number"
+                                                                                value="{{ $player->shirt_number }}" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="" class="form-label">Oyuncu
+                                                                        Hayatı</label>
+                                                                    <textarea class="form-control" id="editor1" cols="30" rows="10" name="biography">{{ $player->biography }}</textarea>
+                                                                </div>
+                                                                <button type="button" class="btn btn-warning"
+                                                                    data-bs-dismiss="modal">İptal</button>
+                                                                <button type="submit"
+                                                                    class="btn btn-danger">Güncelle</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
-                            <tfoot>
-                                {{-- <tr>
-                                <th>Name</th>
-                                <th>Position</th>
-                                <th>Office</th>
-                                <th>Age</th>
-                                <th>Start date</th>
-                                <th>Salary</th>
-                            </tr> --}}
-                            </tfoot>
                         </table>
                     </div>
                 </div>

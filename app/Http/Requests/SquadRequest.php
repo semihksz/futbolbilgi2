@@ -24,12 +24,10 @@ class SquadRequest extends FormRequest
         $rule = [
             'team' => 'required',
             'season_id' => 'required',
-            'image' => 'required|image|mimes:png,jpg,jpeg,webp',
             'name' => 'required',
             'nationality' => 'required',
             'position' => 'required',
             'birthday' => 'required',
-            'age' => 'required',
             'height' => 'required',
             'shirt_number' => 'required',
         ];

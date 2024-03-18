@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 use Spatie\Sluggable\SlugOptions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -55,5 +56,11 @@ class Squad extends Model
     public function editor()
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    public function setBirthdayAttribute($value)
+    {
+        $this->attributes['birthday'] = $value;
+        $this->attributes['age'] = Carbon::parse($value)->age;
     }
 }

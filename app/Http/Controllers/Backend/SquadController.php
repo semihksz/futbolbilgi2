@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Models\Squad;
 use App\Models\Season;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Http\Requests\SquadRequest;
 use App\Http\Controllers\Controller;
 
@@ -38,6 +39,10 @@ class SquadController extends Controller
             $filename = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('assets/images/players'), $filename);
         }
+
+        $birthday = Carbon::parse($validate['birthday']);
+        $age = $birthday->age;
+
         $new_player = Squad::create([
             'lang' => $request->lang,
             'team' => $validate['team'],
@@ -47,7 +52,7 @@ class SquadController extends Controller
             'nationality' => $validate['nationality'],
             'position' => $validate['position'],
             'birthday' => $validate['birthday'],
-            'age' => $validate['age'],
+            'age' => $age,
             'height' => $validate['height'],
             'weight' => $request->weight ? $request->weight : '',
             'shirt_number' => $validate['shirt_number'],
@@ -83,9 +88,39 @@ class SquadController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Squad $squad)
+    public function update(SquadRequest $request, Squad $takim_kadrosu)
     {
-        //
+        $validate = $request->validated();
+
+        if ($request->file('image')) {
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('assets/images/players'), $filename);
+            $takim_kadrosu->image = $filename;
+        }
+
+        $birthday = Carbon::parse($validate['birthday']);
+        $age = $birthday->age;
+
+        $takim_kadrosu->lang = $request->lang;
+        $takim_kadrosu->team = $validate['team'];
+        $takim_kadrosu->season_id = $validate['season_id'];
+        $takim_kadrosu->name = $validate['name'];
+        $takim_kadrosu->nationality = $validate['nationality'];
+        $takim_kadrosu->position = $validate['position'];
+        $takim_kadrosu->birthday = $validate['birthday'];
+        $takim_kadrosu->age = $age;
+        $takim_kadrosu->height = $validate['height'];
+        $takim_kadrosu->weight = $request->weight ? $request->weight : '';
+        $takim_kadrosu->shirt_number = $validate['shirt_number'];
+        $takim_kadrosu->biography = $request->biography;
+        $takim_kadrosu->updated_by = auth()->id();
+        
+        if ($takim_kadrosu->save()) {
+            return redirect()->back()->with('success', 'Oyuncu başarıyla güncellendi.');
+        } else {
+            return redirect()->back()->with('error', 'Oyuncu güncellemede hata.');
+        }
     }
 
     /**
