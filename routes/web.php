@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Backend\HomeController;
 use App\Http\Controllers\Backend\SeasonController;
 use App\Http\Controllers\Backend\SquadController;
+use App\Http\Controllers\Backend\TechnicalSquadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,5 +27,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [HomeController::class, 'index'])->name('admin.index');
         Route::resource('sezon', SeasonController::class);
         Route::resource('takim-kadrosu', SquadController::class);
+        Route::resource('teknik-kadro', TechnicalSquadController::class);
     });
 });

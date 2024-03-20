@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
+use App\Models\Squad;
 use App\Models\Season;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class SeasonController extends Controller
 {
@@ -13,9 +14,8 @@ class SeasonController extends Controller
      */
     public function index()
     {
-        $seasons = Season::get();
-        return view('admin.pages.season', compact('seasons'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -51,9 +51,10 @@ class SeasonController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Season $season)
+    public function show($sezon)
     {
-        //
+        $season = Season::where('slug', $sezon)->first();
+        return view('admin.pages.season', compact('season'));
     }
 
     /**

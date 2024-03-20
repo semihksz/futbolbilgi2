@@ -23,28 +23,49 @@
                 <div class="parent-icon">
                     <ion-icon name="football-outline"></ion-icon>
                 </div>
-                <div class="menu-title">Erkek Futbol A Takımı</div>
+                <div class="menu-title">Futbol</div>
             </a>
             <ul>
                 <li>
-                    <a href="{{ route('sezon.index') }}">
-                        <ion-icon name="ellipse-outline"></ion-icon>Takım Kadrosu
+                    <a class="has-arrow" href="javascript:;">
+                        <ion-icon name="ellipse-outline"></ion-icon>Erkek Futbol A Takımı
                     </a>
+                    <ul>
+                        @foreach (\App\Models\Season::get() as $season)
+                            <li>
+                                <a href="{{ route('sezon.show', ['sezon' => $season->slug]) }}">
+                                    <ion-icon name="ellipse-outline"></ion-icon>{{ $season->season_date }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
                 </li>
                 <li>
-                    <a href="authentication-sign-in-basic.html">
-                        <ion-icon name="ellipse-outline"></ion-icon>İdari Ve Teknik Kadro
+                    <a class="has-arrow" href="javascript:;">
+                        <ion-icon name="ellipse-outline"></ion-icon>Erkek Futbol U 19 Takımı
                     </a>
-                </li>
-                <li>
-                    <a href="authentication-sign-in-basic.html">
-                        <ion-icon name="ellipse-outline"></ion-icon>Puan Durumu
-                    </a>
-                </li>
-                <li>
-                    <a href="authentication-sign-in-basic.html">
-                        <ion-icon name="ellipse-outline"></ion-icon>Fikstür
-                    </a>
+                    <ul>
+                        <li>
+                            <a href="authentication-sign-in-basic.html">
+                                <ion-icon name="ellipse-outline"></ion-icon>Takım Kadrosu
+                            </a>
+                        </li>
+                        <li>
+                            <a href="authentication-sign-in-basic.html">
+                                <ion-icon name="ellipse-outline"></ion-icon>İdari Ve Teknik Kadro
+                            </a>
+                        </li>
+                        <li>
+                            <a href="authentication-sign-in-basic.html">
+                                <ion-icon name="ellipse-outline"></ion-icon>Puan Durumu
+                            </a>
+                        </li>
+                        <li>
+                            <a href="authentication-sign-in-basic.html">
+                                <ion-icon name="ellipse-outline"></ion-icon>Fikstür
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </li>

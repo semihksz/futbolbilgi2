@@ -36,7 +36,49 @@
     </div>
     <div class="card">
         <div class="card-body">
-            <div class="table-responsive">
+            <div class="col-lg-12">
+                <div class="row text-center">
+                    <div class="col-lg-4">
+                        <a href="{{ route('takim-kadrosu.show', ['takim_kadrosu' => $season->slug]) }}">
+                            <div class="card">
+                                <div class="card-body p-5">
+                                    <h4 class="card-title">Takım Kadrosu</h4>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-4">
+                        <a href="{{ route('teknik-kadro.show', ['teknik_kadro' => $season->slug]) }}">
+                            <div class="card">
+                                <div class="card-body p-5">
+                                    <h4 class="card-title">İdari ve Teknik Kadro</h4>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-4">
+                        <a href="">
+                            <div class="card">
+                                <div class="card-body p-5">
+                                    <h4 class="card-title">Puan Durumu</h4>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-4">
+                        <a href="">
+                            <div class="card">
+                                <div class="card-body p-5">
+                                    <h4 class="card-title">Fikstür</h4>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            {{-- <div class="table-responsive">
                 <table id="example2" class="table table-striped table-bordered">
                     <thead>
                         <tr>
@@ -55,7 +97,7 @@
                         @endforeach
                     </tbody>
                 </table>
-            </div>
+            </div> --}}
         </div>
     </div>
 @endsection

@@ -342,6 +342,12 @@
                                                                 method="post">
                                                                 @csrf
                                                                 @method('PUT')
+                                                                <input type="hidden" name="team"
+                                                                    value="erkek-futbol-a-takim" required />
+                                                                <input type="hidden" name="season_id"
+                                                                    value="{{ $season_id->id }}" required />
+                                                                <input type="hidden" name="lang"
+                                                                    value="{{ $player->lang }}" required />
                                                                 <div class="mb-3">
                                                                     <img src="{{ asset('assets/images/players' . '/' . $player->image) }}"
                                                                         alt="" class="mb-2">
@@ -365,7 +371,7 @@
                                                                     <label for="" class="form-label">Oyuncu
                                                                         Mevkisi</label>
                                                                     <select class="form-select form-select-md"
-                                                                        name="{{ $player->position }}">
+                                                                        name="position">
                                                                         @if ($player->position == 'kal')
                                                                             <option value="kal" selected>Kaleci</option>
                                                                             <option value="def">Defans</option>

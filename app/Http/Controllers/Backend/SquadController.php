@@ -17,7 +17,7 @@ class SquadController extends Controller
     public function index()
     {
         $players = Squad::where('is_active', 1)->where('lang', 'tr')->get();
-        return view('admin.pages.squad', compact('players'));
+        return view('admin.pages.squad.squad', compact('players'));
     }
 
     /**
@@ -74,7 +74,7 @@ class SquadController extends Controller
         $season_id = Season::where('slug', $takim_kadrosu)->select('id', 'season_date')->first();
         $playersTr = Squad::where('season_id', $season_id->id)->where('is_active', '1')->where('lang', 'tr')->get();
         $playersEn = Squad::where('season_id', $season_id->id)->where('is_active', '1')->where('lang', 'en')->get();
-        return view('admin.pages.squad', compact('playersTr', 'playersEn', 'season_id'));
+        return view('admin.pages.squad.squad', compact('playersTr', 'playersEn', 'season_id'));
     }
 
     /**
@@ -115,7 +115,7 @@ class SquadController extends Controller
         $takim_kadrosu->shirt_number = $validate['shirt_number'];
         $takim_kadrosu->biography = $request->biography;
         $takim_kadrosu->updated_by = auth()->id();
-        
+
         if ($takim_kadrosu->save()) {
             return redirect()->back()->with('success', 'Oyuncu başarıyla güncellendi.');
         } else {
