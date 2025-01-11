@@ -10,7 +10,7 @@
     <!--navigation-->
     <ul class="metismenu" id="menu">
         <li>
-            <a href="index.html">
+            <a href="{{ route('admin.index') }}">
                 <div class="parent-icon">
                     <ion-icon name="home-outline"></ion-icon>
                 </div>
@@ -31,6 +31,11 @@
                         <ion-icon name="ellipse-outline"></ion-icon>Erkek Futbol A Takımı
                     </a>
                     <ul>
+                        <li>
+                            <a href="{{ route('sezon.index') }}">
+                                <ion-icon name="ellipse-outline"></ion-icon>Tüm Sezonlar
+                            </a>
+                        </li>
                         @foreach (\App\Models\Season::get() as $season)
                             <li>
                                 <a href="{{ route('sezon.show', ['sezon' => $season->slug]) }}">

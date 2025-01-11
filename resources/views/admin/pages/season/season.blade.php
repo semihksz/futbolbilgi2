@@ -66,7 +66,7 @@
                         </a>
                     </div>
                     <div class="col-lg-4">
-                        <a href="">
+                        <a href="{{ route('fikstür.index') }}">
                             <div class="card">
                                 <div class="card-body p-5">
                                     <h4 class="card-title">Fikstür</h4>

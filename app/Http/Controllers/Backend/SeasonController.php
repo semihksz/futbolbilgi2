@@ -14,6 +14,8 @@ class SeasonController extends Controller
      */
     public function index()
     {
+        $all_seasons = Season::all();
+        return view('admin.pages.season.allseason', compact('all_seasons'));
     }
 
 
@@ -44,7 +46,7 @@ class SeasonController extends Controller
             'created_by' => auth()->id(),
         ]);
         if ($new_season) {
-            return redirect()->route('sezon.index')->with('success', 'Sezon başarıyla eklendi.');
+            return redirect('/admin/sezon/' . $new_season->slug)->with('success', 'Sezon başarıyla eklendi.');
         }
     }
 
@@ -54,7 +56,7 @@ class SeasonController extends Controller
     public function show($sezon)
     {
         $season = Season::where('slug', $sezon)->first();
-        return view('admin.pages.season', compact('season'));
+        return view('admin.pages.season.season', compact('season'));
     }
 
     /**
@@ -76,8 +78,11 @@ class SeasonController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Season $season)
+    public function destroy($sezon)
     {
-        //
+        $season = Season::where('id', $sezon)->first();
+        if ($season->delete()) {
+            return redirect()->route('sezon.index')->with('success', 'Sezon başarıyla silindi.');
+        }
     }
 }

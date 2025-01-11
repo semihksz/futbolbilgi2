@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\HomeController;
 use App\Http\Controllers\Backend\SeasonController;
 use App\Http\Controllers\Backend\SquadController;
 use App\Http\Controllers\Backend\TechnicalSquadController;
+use App\Http\Controllers\FixturesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,5 +29,6 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('sezon', SeasonController::class);
         Route::resource('takim-kadrosu', SquadController::class);
         Route::resource('teknik-kadro', TechnicalSquadController::class);
+        Route::resource('fikstür', FixturesController::class);
     });
 });
